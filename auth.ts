@@ -28,7 +28,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         sameSite: "lax",
         secure: true,
         path: "/",
-        domain: ".vercel.app",
+        domain: ".urirep.com",
       },
     },
   },
