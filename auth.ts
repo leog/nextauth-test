@@ -20,6 +20,20 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       }
     },
   },
+  cookies: {
+    sessionToken: {
+      options: { domain: ".vercel.app" },
+    },
+    callbackUrl: {
+      options: { domain: ".vercel.app" },
+    },
+    csrfToken: {
+      options: { domain: ".vercel.app" },
+    },
+    state: {
+      options: { domain: ".vercel.app" },
+    },
+  },
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID,
