@@ -2,17 +2,9 @@ import NextAuth from "next-auth";
 import "next-auth/jwt";
 import GoogleProvider, { type GoogleProfile } from "next-auth/providers/google";
 import { createStorage } from "unstorage";
-import memoryDriver from "unstorage/drivers/memory";
-import vercelKVDriver from "unstorage/drivers/vercel-kv";
 import { UnstorageAdapter } from "@auth/unstorage-adapter";
 
-const storage = createStorage({
-  driver: process.env.VERCEL
-    ? vercelKVDriver({
-        env: "AUTH_KV",
-      })
-    : memoryDriver(),
-});
+const storage = createStorage();
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   debug: !!process.env.AUTH_DEBUG,
