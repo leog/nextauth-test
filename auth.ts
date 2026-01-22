@@ -20,6 +20,18 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       }
     },
   },
+  cookies: {
+    state: {
+      name: "__Secure-authjs.state",
+      options: {
+        httpOnly: true,
+        sameSite: "lax",
+        secure: true,
+        path: "/",
+        domain: ".urirep.com",
+      },
+    },
+  },
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID,
