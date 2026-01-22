@@ -1,4 +1,5 @@
-import { decode } from "@auth/core/jwt"; // or 'next-auth/jwt' for v4
+import { decode } from "@auth/core/jwt";
+import type { NextApiRequest, NextApiResponse } from "next";
 
 async function decodeSecureState(token: string) {
   const decoded = await decode({
@@ -9,28 +10,28 @@ async function decodeSecureState(token: string) {
   return decoded; // Returns the decrypted JSON payload
 }
 
-export async function handler(req: Request): Promise<Response> {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse,
+) {
   try {
-    const { searchParams } = new URL(req.url);
+    const { searchParams } = new URL(req.url || "");
     const stateToken = searchParams.get("state");
 
     if (!stateToken) {
-      return new Response("Missing state token", { status: 400 });
+      return res.status(400).send("Missing state token");
     }
 
     const decodedState = await decodeSecureState(stateToken);
 
     if (!decodedState) {
-      return new Response("Invalid or expired state token", { status: 400 });
+      return res.status(400).send("Invalid or expired state token");
     }
 
-    return new Response(JSON.stringify(decodedState), {
-      status: 200,
-      headers: { "Content-Type": "application/json" },
-    });
+    return res.status(200).json(decodedState);
   } catch (e) {
-    return new Response("Internal Server Error: " + (e as Error).message, {
-      status: 500,
-    });
+    return res
+      .status(500)
+      .send("Internal Server Error: " + (e as Error).message);
   }
 }
